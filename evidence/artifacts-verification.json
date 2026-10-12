@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-12T21:24:40.044Z",
+  "task": "ee3ae353-aa9d-4aeb-9dc0-6b5e5af1be45",
+  "head": "56831f5e91607397a3162494e6adef997d669a2d",
+  "parents": [
+    "b606630a334cb13bdf3d2fe76778c7656897ea24",
+    "eed7bdf89a431e1b300e37523d659d70e8e386f6"
+  ],
+  "contexts": [
+    ".agentguard/builder.json",
+    ".agentguard/verifier.json"
+  ],
+  "sourceMatchesReviewed": true
+}

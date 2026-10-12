@@ -11,7 +11,7 @@
 - [x] MIT license and standalone implementation prepared.
 - [x] Public intentionally flawed signup fixture and real static scan report.
 - [x] Signup fix and generated tests validated, with reviewer corrections explicitly attributed.
-- [ ] Competition implementation published and clean-clone instructions verified.
+- [x] Competition implementation published; fresh standalone npm install, typecheck, nine tests and bundle verified.
 - [ ] Genuine 7–9 minute video recorded, decoded and checked below 2 GiB.
 - [ ] Entrant reviews form entries, eligibility, links and final rules.
 - [ ] Entrant personally submits the form. This is intentionally not automated.
