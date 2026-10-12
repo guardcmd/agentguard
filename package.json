@@ -1,0 +1,28 @@
+{
+  "name": "guardcmd-agentguard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "check": "npm run typecheck && npm test && wrangler deploy --dry-run",
+    "types": "wrangler types"
+  },
+  "dependencies": {
+    "guardcmd": "0.2.0",
+    "isomorphic-git": "^1.37.4",
+    "memfs": "^4.17.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "latest",
+    "@types/node": "^24.0.0",
+    "playwright": "^1.63.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "wrangler": "4.149.0"
+  }
+}

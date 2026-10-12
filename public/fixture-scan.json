@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1",
+  "scannerVersion": "0.1.0",
+  "root": "guardcmd-demo-signup",
+  "stack": {
+    "languages": [
+      "javascript"
+    ],
+    "packageManagers": [],
+    "frameworks": [
+      "express"
+    ],
+    "runtime": "node",
+    "authProviders": [],
+    "datastores": [],
+    "externalServices": [],
+    "hostingHints": [],
+    "workspaceRoots": [
+      "."
+    ],
+    "routeFiles": 1,
+    "evidence": [
+      {
+        "technology": "express",
+        "category": "framework",
+        "confidence": 0.65,
+        "evidence": [
+          {
+            "kind": "package.json:dep:express",
+            "weight": 0.65,
+            "detail": "dependency \"express@5.1.0\"",
+            "file": "package.json"
+          }
+        ]
+      },
+      {
+        "technology": "javascript",
+        "category": "language",
+        "confidence": 0.2,
+        "evidence": [
+          {
+            "kind": "source-files:.js/.jsx/.mjs",
+            "weight": 0.2,
+            "detail": "2 JavaScript source file(s)"
+          }
+        ]
+      },
+      {
+        "technology": "node",
+        "category": "runtime",
+        "confidence": 0.7,
+        "evidence": [
+          {
+            "kind": "file:package.json",
+            "weight": 0.7,
+            "detail": "root package.json present",
+            "file": "package.json"
+          }
+        ]
+      }
+    ]
+  },
+  "routes": [
+    {
+      "framework": "express",
+      "method": "POST",
+      "routePath": "/signup",
+      "handler": {
+        "file": "src/signup.js",
+        "line": 9
+      }
+    }
+  ],
+  "surfaces": [
+    {
+      "surfaceId": "surf_9qmhl0",
+      "route": "/signup",
+      "method": "POST",
+      "handler": {
+        "file": "src/signup.js",
+        "line": 9
+      },
+      "action": "auth.signup",
+      "surfaceType": "SIGNUP",
+      "exposure": "public",
+      "abuseClasses": [
+        "ACCOUNT_FARMING",
+        "AUTOMATION",
+        "SPAM"
+      ],
+      "evidence": [
+        {
+          "kind": "route",
+          "symbol": "POST /signup",
+          "file": "src/signup.js",
+          "line": 9
+        },
+        {
+          "kind": "input",
+          "symbol": "email",
+          "file": "src/signup.js",
+          "line": 9
+        }
+      ],
+      "confidence": 0.61,
+      "impact": 0.8,
+      "recommendedPriority": "low",
+      "priorityScore": 0.15616000000000005
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec_1at62np",
+      "surfaceId": "surf_9qmhl0",
+      "title": "Slow automated account farming at signup",
+      "summary": "POST /signup creates accounts (auth.signup). Unprotected signup is the entry point for account farming, automation, and downstream spam. Recommend per-IP and per-device velocity limits plus disposable-email and device-cluster signals, in shadow mode until thresholds are tuned.",
+      "suggestedPolicy": {
+        "action": "auth.signup",
+        "mode": "shadow",
+        "velocity": [
+          {
+            "dimension": "actor",
+            "limit": 5,
+            "windowSeconds": 3600
+          },
+          {
+            "dimension": "ip",
+            "limit": 20,
+            "windowSeconds": 3600
+          },
+          {
+            "dimension": "device",
+            "limit": 10,
+            "windowSeconds": 3600
+          }
+        ],
+        "signals": [
+          "velocity",
+          "disposableEmail",
+          "deviceCluster",
+          "requestCadence"
+        ],
+        "thresholds": {
+          "challenge": 40,
+          "throttle": 60,
+          "review": 75,
+          "block": 90
+        },
+        "units": 1
+      },
+      "controls": [
+        "actor: 5 units / 1hr",
+        "ip: 20 units / 1hr",
+        "device: 10 units / 1hr",
+        "Reject disposable / throwaway email domains",
+        "Cluster devices to detect one machine minting many accounts"
+      ],
+      "estimatedChangedLines": 18,
+      "priorityScore": 0.15616000000000005,
+      "priority": "low"
+    }
+  ],
+  "warnings": [],
+  "stats": {
+    "filesWalked": 6,
+    "routeFiles": 1,
+    "routes": 1,
+    "surfaces": 1,
+    "classifiedSurfaces": 1,
+    "recommendations": 1,
+    "durationMs": 11
+  }
+}

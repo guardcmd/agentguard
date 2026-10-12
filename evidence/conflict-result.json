@@ -1,0 +1,178 @@
+{
+  "checkedAt": "2026-10-12T21:18:00.605Z",
+  "error": "Conflicting files: src/tasks.js",
+  "unchangedTarget": true,
+  "task": {
+    "scenario": "tasks",
+    "id": "080349d6-238c-4e4e-a734-f11666f8d6db",
+    "prompt": "Conflict exercise. BOTH agents must edit src/tasks.js. Check your agent ID from the system message. If your agent ID is builder: change addTask to compute id using Math.max(0, ...tasks.map(t => t.id)) + 1. If your agent ID is verifier: change addTask to compute id using Date.now(). Implement ONLY the instruction for your own agent ID, never both. Keep all exports and all other behavior. Return only src/tasks.js. These are deliberately incompatible proposals for a conflict demonstration.",
+    "createdAt": 1791839857728,
+    "status": "review",
+    "mode": "shadow",
+    "agents": [
+      {
+        "id": "builder",
+        "role": "Implementation engineer: improve src/tasks.js to meet the request. Focus on implementation, not tests.",
+        "status": "merged",
+        "startedAt": 1791839859479,
+        "repo": "ag-080349d6-238c-4e4e-a734-f11666f8d6db-builder",
+        "remote": "https://a6b31c78eeaa0c1c0386e8dda330daa5.artifacts.cloudflare.net/git/agentguard-competition/ag-080349d6-238c-4e4e-a734-f11666f8d6db-builder.git",
+        "inferenceStartedAt": 1791839862101,
+        "inferenceCalls": [
+          {
+            "start": 1791839862101,
+            "end": 1791839866687
+          }
+        ],
+        "inferenceEndedAt": 1791839866687,
+        "changes": [
+          {
+            "path": "src/tasks.js",
+            "before": "export function addTask(tasks, title) {\n  return [...tasks, { id: tasks.length + 1, title, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n",
+            "after": "export function addTask(tasks, title) {\n  const newId = tasks.length > 0 ? Math.max(0, ...tasks.map(t => t.id)) + 1 : 1;\n  return [...tasks, { id: newId, title, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n"
+          }
+        ],
+        "summary": "Changed addTask to compute id using Math.max(0, ...tasks.map(t => t.id)) + 1.",
+        "review": {
+          "action": "allow",
+          "score": 0,
+          "reasons": [],
+          "enforced": false
+        },
+        "context": ".agentguard/builder.json",
+        "head": "553000e6c2af7e72ce2c26c3b08308e0b1bc97cc",
+        "endedAt": 1791839867448,
+        "mergedHead": "25504a8b3afe59f75d9fe862064066cd09b64405"
+      },
+      {
+        "id": "verifier",
+        "role": "Quality engineer: improve test/tasks.test.js and docs/behavior.md to cover the request. Do not change src/tasks.js unless the user explicitly asks both agents to change it.",
+        "status": "review",
+        "startedAt": 1791839859479,
+        "repo": "ag-080349d6-238c-4e4e-a734-f11666f8d6db-verifier",
+        "remote": "https://a6b31c78eeaa0c1c0386e8dda330daa5.artifacts.cloudflare.net/git/agentguard-competition/ag-080349d6-238c-4e4e-a734-f11666f8d6db-verifier.git",
+        "inferenceStartedAt": 1791839861582,
+        "inferenceCalls": [
+          {
+            "start": 1791839861582,
+            "end": 1791839864764
+          }
+        ],
+        "inferenceEndedAt": 1791839864764,
+        "changes": [
+          {
+            "path": "src/tasks.js",
+            "before": "export function addTask(tasks, title) {\n  return [...tasks, { id: tasks.length + 1, title, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n",
+            "after": "export function addTask(tasks, title) {\n  return [...tasks, { id: Date.now(), title, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n"
+          }
+        ],
+        "summary": "Updated addTask to compute id using Date.now() for conflict demonstration.",
+        "review": {
+          "action": "allow",
+          "score": 0,
+          "reasons": [],
+          "enforced": false
+        },
+        "context": ".agentguard/verifier.json",
+        "head": "042610b8f343fce8f3b21b920360b43262125269",
+        "endedAt": 1791839865303,
+        "approval": {
+          "head": "042610b8f343fce8f3b21b920360b43262125269",
+          "targetHead": "25504a8b3afe59f75d9fe862064066cd09b64405",
+          "at": 1791839875001,
+          "reviewer": "authenticated-reviewer"
+        }
+      }
+    ],
+    "events": [
+      {
+        "at": 1791839857728,
+        "type": "queued",
+        "detail": "Two independent coding sessions scheduled"
+      },
+      {
+        "at": 1791839857828,
+        "type": "started",
+        "detail": "Creating real Artifacts repositories"
+      },
+      {
+        "at": 1791839859479,
+        "type": "repository-created",
+        "detail": "ag-080349d6-238c-4e4e-a734-f11666f8d6db-base at a40bd5c0266218d9718f69ad8e6e7ab22dc120a8"
+      },
+      {
+        "at": 1791839861582,
+        "type": "inference-started",
+        "detail": "verifier: @cf/qwen/qwen2.5-coder-32b-instruct"
+      },
+      {
+        "at": 1791839862101,
+        "type": "inference-started",
+        "detail": "builder: @cf/qwen/qwen2.5-coder-32b-instruct"
+      },
+      {
+        "at": 1791839864764,
+        "type": "security-review",
+        "detail": "verifier: allow (0), shadow"
+      },
+      {
+        "at": 1791839865303,
+        "type": "proposal-committed",
+        "detail": "verifier: 042610b8f343fce8f3b21b920360b43262125269"
+      },
+      {
+        "at": 1791839866687,
+        "type": "security-review",
+        "detail": "builder: allow (0), shadow"
+      },
+      {
+        "at": 1791839867448,
+        "type": "proposal-committed",
+        "detail": "builder: 553000e6c2af7e72ce2c26c3b08308e0b1bc97cc"
+      },
+      {
+        "at": 1791839867448,
+        "type": "agents-finished",
+        "detail": "Inference overlap: 2663 ms. 2 committed proposals available for review."
+      },
+      {
+        "at": 1791839873595,
+        "type": "approved",
+        "detail": "builder: 553000e6c2af7e72ce2c26c3b08308e0b1bc97cc onto a40bd5c0266218d9718f69ad8e6e7ab22dc120a8"
+      },
+      {
+        "at": 1791839873718,
+        "type": "merge-started",
+        "detail": "builder: 553000e6c2af7e72ce2c26c3b08308e0b1bc97cc"
+      },
+      {
+        "at": 1791839874627,
+        "type": "merged",
+        "detail": "builder: merge commit 25504a8b3afe59f75d9fe862064066cd09b64405"
+      },
+      {
+        "at": 1791839875001,
+        "type": "approved",
+        "detail": "verifier: 042610b8f343fce8f3b21b920360b43262125269 onto 25504a8b3afe59f75d9fe862064066cd09b64405"
+      },
+      {
+        "at": 1791839875108,
+        "type": "merge-started",
+        "detail": "verifier: 042610b8f343fce8f3b21b920360b43262125269"
+      },
+      {
+        "at": 1791839875761,
+        "type": "merge-rejected",
+        "detail": "Conflicting files: src/tasks.js"
+      }
+    ],
+    "baseRepo": "ag-080349d6-238c-4e4e-a734-f11666f8d6db-base",
+    "targetHead": "25504a8b3afe59f75d9fe862064066cd09b64405",
+    "baseHead": "a40bd5c0266218d9718f69ad8e6e7ab22dc120a8",
+    "baseRemote": "https://a6b31c78eeaa0c1c0386e8dda330daa5.artifacts.cloudflare.net/git/agentguard-competition/ag-080349d6-238c-4e4e-a734-f11666f8d6db-base.git",
+    "conflicts": [
+      "src/tasks.js"
+    ],
+    "overlapMs": 2663
+  }
+}

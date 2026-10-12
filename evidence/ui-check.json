@@ -1,0 +1,15 @@
+{
+  "base": "https://demo.guardcmd.ai",
+  "checkedAt": "2026-10-12T21:18:29.474Z",
+  "desktop": [
+    1440,
+    1100
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "pageErrors": [],
+  "dialog": true,
+  "mobileOverflow": false
+}
