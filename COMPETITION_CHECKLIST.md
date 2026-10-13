@@ -12,7 +12,7 @@
 - [x] Public intentionally flawed signup fixture and real static scan report.
 - [x] Signup fix and generated tests validated, with reviewer corrections explicitly attributed.
 - [x] Competition implementation published; fresh standalone npm install, typecheck, nine tests and bundle verified.
-- [ ] Genuine 7–9 minute video recorded, decoded and checked below 2 GiB.
+- [x] Genuine captioned MP4 delivered: 7:30.88, 12,131,153 bytes; full decode and representative-frame review passed.
 - [ ] Entrant reviews form entries, eligibility, links and final rules.
 - [ ] Entrant personally submits the form. This is intentionally not automated.
 

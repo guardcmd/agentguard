@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-13T02:12:08.807Z",
+  "filename": "DEMO_VIDEO.mp4",
+  "durationSeconds": 450.88,
+  "bytes": 12131153,
+  "width": 1440,
+  "height": 1010,
+  "codec": "h264",
+  "fullDecodePassed": true,
+  "audio": "None; explanatory captions burned into a separate bottom band",
+  "task": "8ebe4634-7d28-4731-aaa9-a12c8158050b",
+  "visualReview": "Six representative decoded frames inspected: product, agent progress, code review, merge rejection, unchanged target and public PR. Captions readable; no unmasked credentials."
+}

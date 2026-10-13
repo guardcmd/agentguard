@@ -1,0 +1,319 @@
+{
+  "durationMs": 451000,
+  "task": {
+    "scenario": "tasks",
+    "id": "8ebe4634-7d28-4731-aaa9-a12c8158050b",
+    "prompt": "Add input validation to addTask: trim the title, reject empty or non-string titles, and choose a unique numeric ID even when tasks have been removed. Add tests covering these cases and document the behavior.",
+    "createdAt": 1791840351189,
+    "status": "review",
+    "mode": "shadow",
+    "agents": [
+      {
+        "id": "builder",
+        "role": "Implementation engineer: improve src/tasks.js to meet the request. Focus on implementation, not tests.",
+        "status": "merged",
+        "startedAt": 1791840353094,
+        "repo": "ag-8ebe4634-7d28-4731-aaa9-a12c8158050b-builder",
+        "remote": "https://a6b31c78eeaa0c1c0386e8dda330daa5.artifacts.cloudflare.net/git/agentguard-competition/ag-8ebe4634-7d28-4731-aaa9-a12c8158050b-builder.git",
+        "inferenceStartedAt": 1791840355777,
+        "inferenceCalls": [
+          {
+            "start": 1791840355777,
+            "end": 1791840362775
+          }
+        ],
+        "inferenceEndedAt": 1791840362775,
+        "changes": [
+          {
+            "path": "src/tasks.js",
+            "before": "export function addTask(tasks, title) {\n  return [...tasks, { id: tasks.length + 1, title, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n",
+            "after": "let nextId = 1;\n\nexport function addTask(tasks, title) {\n  if (typeof title !== 'string' || !title.trim()) {\n    throw new Error('Title must be a non-empty string.');\n  }\n  const trimmedTitle = title.trim();\n  while (tasks.some(task => task.id === nextId)) {\n    nextId++;\n  }\n  return [...tasks, { id: nextId++, title: trimmedTitle, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n"
+          }
+        ],
+        "summary": "Added input validation to addTask: trimmed the title, rejected empty or non-string titles, and ensured unique numeric IDs even after tasks have been removed.",
+        "review": {
+          "action": "allow",
+          "score": 0,
+          "reasons": [],
+          "enforced": false
+        },
+        "context": ".agentguard/builder.json",
+        "head": "3c0bfff5bf7ec908ca4f03d3eba009fab181f69c",
+        "endedAt": 1791840363363,
+        "mergedHead": "0c6f62fe9f18018cb067033ee9567ca49d9e6e1d"
+      },
+      {
+        "id": "verifier",
+        "role": "Quality engineer: improve test/tasks.test.js and docs/behavior.md to cover the request. Do not change src/tasks.js unless the user explicitly asks both agents to change it.",
+        "status": "review",
+        "startedAt": 1791840353094,
+        "repo": "ag-8ebe4634-7d28-4731-aaa9-a12c8158050b-verifier",
+        "remote": "https://a6b31c78eeaa0c1c0386e8dda330daa5.artifacts.cloudflare.net/git/agentguard-competition/ag-8ebe4634-7d28-4731-aaa9-a12c8158050b-verifier.git",
+        "inferenceStartedAt": 1791840355781,
+        "inferenceCalls": [
+          {
+            "start": 1791840355781,
+            "end": 1791840379455
+          }
+        ],
+        "inferenceEndedAt": 1791840379455,
+        "changes": [
+          {
+            "path": "docs/behavior.md",
+            "before": null,
+            "after": "# Behavior of Harbor Tasks\n\n## Adding a Task\n- The `addTask` function adds a new task to the list.\n- The task title is trimmed of any leading or trailing whitespace.\n- If the title is an empty string or not a string, an error is thrown.\n- Each task is assigned a unique numeric ID. IDs are incremented based on the highest existing ID, ensuring uniqueness even after tasks are removed.\n\n## Completing a Task\n- The `completeTask` function marks a task as completed by setting its `done` property to `true`.\n"
+          },
+          {
+            "path": "src/tasks.js",
+            "before": "export function addTask(tasks, title) {\n  return [...tasks, { id: tasks.length + 1, title, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n",
+            "after": "export function addTask(tasks, title) {\n  if (typeof title !== 'string' || !title.trim()) {\n    throw new Error('Title must be a non-empty string.');\n  }\n  const trimmedTitle = title.trim();\n  const nextId = tasks.reduce((maxId, task) => Math.max(maxId, task.id), 0) + 1;\n  return [...tasks, { id: nextId, title: trimmedTitle, done: false }];\n}\n\nexport function completeTask(tasks, id) {\n  return tasks.map(task => task.id === id ? { ...task, done: true } : task);\n}\n"
+          },
+          {
+            "path": "test/tasks.test.js",
+            "before": "import assert from 'node:assert/strict';\nimport { addTask, completeTask } from '../src/tasks.js';\nconst tasks = addTask([], 'Ship safely');\nassert.equal(tasks.length, 1);\nassert.equal(completeTask(tasks, 1)[0].done, true);\n",
+            "after": "import assert from 'node:assert/strict';\nimport { addTask, completeTask } from '../src/tasks.js';\n\n// Test adding a valid task\nlet tasks = addTask([], 'Ship safely');\nassert.equal(tasks.length, 1);\nassert.equal(tasks[0].id, 1);\nassert.equal(tasks[0].title, 'Ship safely');\nassert.equal(tasks[0].done, false);\n\n// Test completing a task\nassert.equal(completeTask(tasks, 1)[0].done, true);\n\n// Test adding a task with leading/trailing spaces\ntasks = addTask([], '  Clean up  ');\nassert.equal(tasks[0].title, 'Clean up');\n\n// Test adding a task with an empty string\ntry {\n  addTask(tasks, '');\n  assert.fail('Expected error for empty title');\n} catch (error) {\n  assert.equal(error.message, 'Title must be a non-empty string.');\n}\n\n// Test adding a task with a non-string title\ntry {\n  addTask(tasks, 123);\n  assert.fail('Expected error for non-string title');\n} catch (error) {\n  assert.equal(error.message, 'Title must be a non-empty string.');\n}\n\n// Test unique IDs after removing a task\ntasks = addTask([], 'Task 1');\ntasks = addTask(tasks, 'Task 2');\ntasks = tasks.filter(task => task.id !== 1); // Remove Task 1\ntasks = addTask(tasks, 'Task 3');\nassert.equal(tasks[2].id, 3);\n"
+          }
+        ],
+        "summary": "Added input validation to addTask, including trimming the title, rejecting empty or non-string titles, and ensuring unique numeric IDs. Updated tests and documentation accordingly.",
+        "review": {
+          "action": "allow",
+          "score": 0,
+          "reasons": [],
+          "enforced": false
+        },
+        "context": ".agentguard/verifier.json",
+        "head": "4f3cca48909b3ddd32544cc0f120953bd26c446f",
+        "endedAt": 1791840380116,
+        "approval": {
+          "head": "4f3cca48909b3ddd32544cc0f120953bd26c446f",
+          "targetHead": "0c6f62fe9f18018cb067033ee9567ca49d9e6e1d",
+          "at": 1791840532158,
+          "reviewer": "authenticated-reviewer"
+        }
+      }
+    ],
+    "events": [
+      {
+        "at": 1791840351189,
+        "type": "queued",
+        "detail": "Two independent coding sessions scheduled"
+      },
+      {
+        "at": 1791840351289,
+        "type": "started",
+        "detail": "Creating real Artifacts repositories"
+      },
+      {
+        "at": 1791840353094,
+        "type": "repository-created",
+        "detail": "ag-8ebe4634-7d28-4731-aaa9-a12c8158050b-base at 4a684b8fd69364a11a65bb8a4262d45ecfbba9ee"
+      },
+      {
+        "at": 1791840355777,
+        "type": "inference-started",
+        "detail": "builder: @cf/qwen/qwen2.5-coder-32b-instruct"
+      },
+      {
+        "at": 1791840355781,
+        "type": "inference-started",
+        "detail": "verifier: @cf/qwen/qwen2.5-coder-32b-instruct"
+      },
+      {
+        "at": 1791840362775,
+        "type": "security-review",
+        "detail": "builder: allow (0), shadow"
+      },
+      {
+        "at": 1791840363363,
+        "type": "proposal-committed",
+        "detail": "builder: 3c0bfff5bf7ec908ca4f03d3eba009fab181f69c"
+      },
+      {
+        "at": 1791840379455,
+        "type": "security-review",
+        "detail": "verifier: allow (0), shadow"
+      },
+      {
+        "at": 1791840380116,
+        "type": "proposal-committed",
+        "detail": "verifier: 4f3cca48909b3ddd32544cc0f120953bd26c446f"
+      },
+      {
+        "at": 1791840380116,
+        "type": "agents-finished",
+        "detail": "Inference overlap: 6994 ms. 2 committed proposals available for review."
+      },
+      {
+        "at": 1791840496225,
+        "type": "approved",
+        "detail": "builder: 3c0bfff5bf7ec908ca4f03d3eba009fab181f69c onto 4a684b8fd69364a11a65bb8a4262d45ecfbba9ee"
+      },
+      {
+        "at": 1791840509185,
+        "type": "approved",
+        "detail": "verifier: 4f3cca48909b3ddd32544cc0f120953bd26c446f onto 4a684b8fd69364a11a65bb8a4262d45ecfbba9ee"
+      },
+      {
+        "at": 1791840518155,
+        "type": "merge-started",
+        "detail": "builder: 3c0bfff5bf7ec908ca4f03d3eba009fab181f69c"
+      },
+      {
+        "at": 1791840519433,
+        "type": "merged",
+        "detail": "builder: merge commit 0c6f62fe9f18018cb067033ee9567ca49d9e6e1d"
+      },
+      {
+        "at": 1791840532158,
+        "type": "approved",
+        "detail": "verifier: 4f3cca48909b3ddd32544cc0f120953bd26c446f onto 0c6f62fe9f18018cb067033ee9567ca49d9e6e1d"
+      },
+      {
+        "at": 1791840532454,
+        "type": "merge-started",
+        "detail": "verifier: 4f3cca48909b3ddd32544cc0f120953bd26c446f"
+      },
+      {
+        "at": 1791840533309,
+        "type": "merge-rejected",
+        "detail": "Conflicting files: src/tasks.js"
+      },
+      {
+        "at": 1791857344928,
+        "type": "merge-started",
+        "detail": "verifier: 4f3cca48909b3ddd32544cc0f120953bd26c446f"
+      },
+      {
+        "at": 1791857348430,
+        "type": "merge-rejected",
+        "detail": "Conflicting files: src/tasks.js"
+      }
+    ],
+    "baseRepo": "ag-8ebe4634-7d28-4731-aaa9-a12c8158050b-base",
+    "targetHead": "0c6f62fe9f18018cb067033ee9567ca49d9e6e1d",
+    "baseHead": "4a684b8fd69364a11a65bb8a4262d45ecfbba9ee",
+    "baseRemote": "https://a6b31c78eeaa0c1c0386e8dda330daa5.artifacts.cloudflare.net/git/agentguard-competition/ag-8ebe4634-7d28-4731-aaa9-a12c8158050b-base.git",
+    "conflicts": [
+      "src/tasks.js"
+    ],
+    "overlapMs": 6994
+  },
+  "compatibleTask": "d693560f-8829-4467-b740-5510385b5328",
+  "edit": "Two genuine captures; first 307 seconds retained, idle timeout removed, continuation explicitly captioned. No fabricated responses or time acceleration.",
+  "segments": [
+    {
+      "capture": 1,
+      "duration": 307
+    },
+    {
+      "capture": 2,
+      "duration": 144
+    }
+  ],
+  "cues": [
+    {
+      "at": 3.274,
+      "text": "GuardCMD AgentGuard: secure Git collaboration for autonomous AI agents. This is a genuine browser recording with explanatory captions."
+    },
+    {
+      "at": 18.014,
+      "text": "GuardCMD is the existing abuse-prevention product. AgentGuard is a separate competition prototype on Cloudflare Workers and Artifacts."
+    },
+    {
+      "at": 30.004,
+      "text": "Owner-supplied 30-day analytics: 31,980 requests, 3,830 visits, 354 MB. These are not registered-user counts and were not independently reverified."
+    },
+    {
+      "at": 41.166,
+      "text": "The competition workspace has its own hostname. Public visitors inspect evidence; separate operator and reviewer credentials authorize changes."
+    },
+    {
+      "at": 58.156,
+      "text": "A Worker authenticates requests. A Durable Object persists tasks and serializes merges. Workers AI generates proposals; Artifacts preserves actual Git history."
+    },
+    {
+      "at": 76.269,
+      "text": "This public MIT fixture is intentionally flawed and never deployed. It contains no credentials, customer data or real account service."
+    },
+    {
+      "at": 95.35300000000001,
+      "text": "This is the actual captured GuardCMD scanner report: one public signup surface, low priority and 61% confidence. It is not a live browser scan."
+    },
+    {
+      "at": 110.987,
+      "text": "Now launch a general coding task. Both agents receive the same baseline, with separate implementation and quality roles. No model responses are prerecorded."
+    },
+    {
+      "at": 120.321,
+      "text": "Two real Workers AI sessions are now running against separate Artifacts forks. The dashboard records actual inference intervals and repository commits."
+    },
+    {
+      "at": 145.003,
+      "text": "Each model is restricted to bounded text changes. Neither receives repository credentials, a shell, private source or permission to merge its own output."
+    },
+    {
+      "at": 170.018,
+      "text": "Both proposals are committed. Measured inference overlap: 7.0 seconds. Each commit includes its own versioned agent context."
+    },
+    {
+      "at": 185.092,
+      "text": "Inspect the real baseline and proposed file. A GuardCMD allow verdict is a heuristic result, not proof that generated code is correct."
+    },
+    {
+      "at": 205.122,
+      "text": "The signup case adds the published GuardCMD SDK in shadow mode, with trusted server IPs and a shared guard instance. Generated proposals passed four local tests."
+    },
+    {
+      "at": 225.02,
+      "text": "The second agent contributes tests and documentation. Independent reviewer checks later corrected missing-body handling; all eight fixture tests pass on the public fix branch."
+    },
+    {
+      "at": 245.331,
+      "text": "The risky-code probe runs the real GuardCMD SDK. BLOCK is the risk verdict; shadow mode is advisory. This destructive snippet is never executed or committed."
+    },
+    {
+      "at": 265.049,
+      "text": "These walkthrough approvals are automated QA actions demonstrating the reviewer protocol. Production use requires a person to inspect the exact source and target commits."
+    },
+    {
+      "at": 289.361,
+      "text": "The first merge changes the target and invalidates the second approval. A stale source/target pair cannot authorize another merge."
+    },
+    {
+      "at": 311.949,
+      "text": "Continued capture after a rejected merge. The quality agent also edited implementation code, creating a real conflict. No code was forced through."
+    },
+    {
+      "at": 323.059,
+      "text": "Inspect the actual overlapping proposal. Role instructions do not guarantee correct output; change inspection and conflict checks remain necessary."
+    },
+    {
+      "at": 341.132,
+      "text": "The live retry is rejected, and the Artifacts target is unchanged. The approval cannot override an incompatible file change."
+    },
+    {
+      "at": 354.093,
+      "text": "For comparison, this earlier verified task merged both compatible proposals. This is separate recorded evidence, not a substituted result for the conflicting task."
+    },
+    {
+      "at": 369.078,
+      "text": "History is read directly from Artifacts. Two-parent merges retain proposal ancestry; independent verification also confirmed both committed agent context files."
+    },
+    {
+      "at": 390.227,
+      "text": "The standalone implementation is public under MIT, with setup instructions and evidence. Nine application tests pass in a fresh standalone installation."
+    },
+    {
+      "at": 413.171,
+      "text": "The signup comparison preserves original model commits and clearly attributes reviewer corrections. Eight fixture tests pass. Shadow mode remains advisory."
+    },
+    {
+      "at": 431.456,
+      "text": "AgentGuard combines parallel work, versioned context, explainable risk and commit-bound approval. It is a bounded prototype, not a general-purpose private repository host."
+    },
+    {
+      "at": 444.004,
+      "text": "Source and run instructions are public. The entrant will review the video and personally submit the competition materials."
+    }
+  ]
+}

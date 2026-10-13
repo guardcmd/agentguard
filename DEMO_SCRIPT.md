@@ -16,3 +16,7 @@ Target: 7 minutes 30 seconds, genuine browser capture with readable captions. Au
 | 7:00–7:30 | Close with the value: concurrent work with attributable context, understandable risk and explicit integration authority. State prototype limitations and that the entrant submits separately. |
 
 The recording script must stop on failed expected interactions rather than substitute fabricated results. The final video is separately checked with ffprobe and decoded frames. Source and evidence can be reproduced independently of the video.
+
+## Final recording outcome
+
+The new live task produced an unexpected overlapping implementation edit from the quality agent. The final film retains the real rejection and explicitly labels a continuation capture. The continuation shows the rejected retry and unchanged target, then identifies an earlier successful two-proposal task separately. It does not substitute that successful history for the conflicting task. The first 307 seconds of the initial recording and 144 seconds of continuation form the 7:31 edit; idle timeout footage is removed.

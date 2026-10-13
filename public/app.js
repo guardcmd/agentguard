@@ -27,7 +27,7 @@ $('history-button').onclick = async () => {
   try { $('git-history').hidden = false; $('git-history').textContent = JSON.stringify(await api(`tasks/${selected}/history`), null, 2); } catch(err) { notify(err.message); }
 };
 function render() {
-  const task = tasks.find(t => t.id === selected) || tasks[0];
+  const task = tasks.find(t => t.id === selected) || tasks.find(t => t.scenario === 'signup' && t.status === 'complete') || tasks[0];
   if (!task) return;
   selected = task.id;
   const signature = JSON.stringify(task);

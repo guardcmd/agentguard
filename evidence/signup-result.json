@@ -231,5 +231,12 @@
   "localTests": {
     "passed": 4,
     "notes": "Reviewed unmodified agent proposals; four generated tests passed. Additional independent QA follows."
+  },
+  "independentReviewerTests": {
+    "passed": 8,
+    "branch": "codex/agentguard-shadow-fix",
+    "commit": "7ef3aee",
+    "url": "https://github.com/guardcmd/agentguard-demo-signup/pull/1",
+    "notes": "Includes four generated checks and four reviewer-added checks. Reviewer corrected absent-body handling and one test title; original Artifacts source remains unmodified."
   }
 }

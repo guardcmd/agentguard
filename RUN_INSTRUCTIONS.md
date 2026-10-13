@@ -62,3 +62,11 @@ All mutation credentials use `Authorization: Bearer ...`. Cross-origin browser w
 ## Cleanup
 
 No command automatically deletes repositories or production resources. When finished, inspect the `agentguard-competition` namespace and the `guardcmd-agentguard` Worker and explicitly remove only those resources if no longer needed. Keep the submission deployment available for judging. Account billing is shared with other applications, so do not cancel the account plan without checking their requirements.
+
+## Video production
+
+The recording workflow follows the real-browser capture approach inspected in the owner's RRenderAI recording scripts. The competition automation is original: it drives the live dashboard in real time, captures actual cloud activity and adds explanatory captions in a separate bottom band. It does not intercept responses, replace repository evidence or accelerate the model clock.
+
+Install Playwright's Chromium if needed with `npx playwright install chromium`. Populate the ignored credential file described above; retain successful signup/conflict evidence files. Run `node scripts/record-demo.mjs`, then `node scripts/encode-demo.mjs` with FFmpeg/ffprobe on PATH. The recording deliberately performs real sample approvals and merges and consumes one task from the 20-task budget. The MP4 stays local and is excluded from Git; the entrant uploads it through the competition form.
+
+The delivered film encountered a genuine conflict on its second proposal. `scripts/continue-demo.mjs` is the case-specific continuation used for that recording; its 307-second cut removes only idle timeout footage. It explicitly distinguishes the conflicting task from previously verified successful integration. See DEMO_SCRIPT.md and IMPLEMENTATION_REPORT.md for the actual outcome.

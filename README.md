@@ -2,7 +2,7 @@
 
 **Secure Git Collaboration for Autonomous AI Agents.** Two real coding sessions work concurrently in isolated Cloudflare Artifacts repositories. GuardCMD reviews each proposal, and a separate reviewer credential approves the exact source and destination commits before a non-forced merge.
 
-[Live dashboard](https://demo.guardcmd.ai) · [Run instructions](RUN_INSTRUCTIONS.md) · [Architecture](CLOUDFLARE_ARCHITECTURE.md) · [Demo script](DEMO_SCRIPT.md)
+[Live dashboard](https://demo.guardcmd.ai) · [Source](https://github.com/guardcmd/agentguard) · [Signup fix comparison](https://github.com/guardcmd/agentguard-demo-signup/pull/1) · [Run instructions](RUN_INSTRUCTIONS.md) · [Architecture](CLOUDFLARE_ARCHITECTURE.md) · [Demo script](DEMO_SCRIPT.md)
 
 ## What actually runs
 
